@@ -34,7 +34,39 @@ var getCityWeather = function (city) {
       // TODO: Write your answer here
       document.location.replace('./index.html');
     }
+
+    fetch(apiURL)
+    .then(function(response) {
+        if (response.ok) {
+            console.log (response);
+            response.json().then(function (data) {
+                console.log(data);
+                displayWeather(data);
+
+            });
+        } else {
+         alert("error:" + response.statusText)
+        }
+    })
+    .catch(function(error) {
+        alert("Unable to retrieve data.");
+    });
+
+
+    
+    var temperature = current.temp;
+    var humidity = current.humidity;
+    var uvIndex = current.uvi;
+    var windSpeed = current.wind_speed;
+    var weatherIcon = current.weather.icon;
+    var cWeather = current.weather;
   };
+
+  var displayWeather = function(data, searchTerm) {
+      citySearchTerm.textContent = searchTerm;
+
+
+  }
 
 /*
 GIVEN a weather dashboard with form inputs
@@ -45,12 +77,7 @@ THEN I am presented with current and future conditions for that city and that ci
 /*
 WHEN I view current weather conditions for that city
 THEN I am presented with the city name, the date, an icon representation of weather conditions, the temperature, the humidity, the wind speed, and the UV index
-    current.temp
-    current.humidity
-    current.uvi
-    current.wind_speed
-    current.weather.icon
-    current.weather
+ 
 */
 
 /*
