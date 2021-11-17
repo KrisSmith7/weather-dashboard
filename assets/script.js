@@ -2,6 +2,8 @@ var citySearchForm = document.querySelector("#user-form")
 var cityInputEl = document.querySelector("#cityname")
 var fiveDayContainerEl = document.querySelector('#forecast-container');
 var citySearchTerm = document.querySelector('#city-search-term');
+var weatherContainer = document.querySelector("#weather-container")
+var weatherList = document.querySelector("#weather-list")
 
 var formSubmitHandler = function (event) {
     event.preventDefault();
@@ -51,20 +53,24 @@ var getCityWeather = function (city) {
     .catch(function(error) {
         alert("Unable to retrieve data.");
     });
-
+ 
 
     
-    var temperature = current.temp;
-    var humidity = current.humidity;
-    var uvIndex = current.uvi;
-    var windSpeed = current.wind_speed;
-    var weatherIcon = current.weather.icon;
-    var cWeather = current.weather;
-  };
+};
 
-  var displayWeather = function(data, searchTerm) {
+var displayWeather = function(data, searchTerm) {
+      var temperature = current.temp;
+      var humidity = current.humidity;
+      var uvIndex = current.uvi;
+      var windSpeed = current.wind_speed;
+      var weatherIcon = current.weather.icon;
+      var cWeather = current.weather;
+
       citySearchTerm.textContent = searchTerm;
 
+      var weatherEl = document.createElement('li');
+     weatherEl.appendChild(data[0].temperature);
+     weatherList.appendChild(weatherE1);
 
   }
 
