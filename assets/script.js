@@ -20,59 +20,72 @@ var formSubmitHandler = function (event) {
     }
 };
 
+
 var getCityWeather = function (city) {
-    var apiURL = "api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=e54e81ac9ec17907a9fb6e5fa99ae12e"
-    // Where is this value coming from?
-    // TODO: Write your answer here
-    var queryString = document.location.search;
-    var cityName = queryString.split('=')[1];
-  
-    if (cityName) {
-      citySearchTerm.textContent = cityName;
-  
-      console.log(cityName);
-    } else {
-      // Under what condition will this run?
-      // TODO: Write your answer here
-      document.location.replace('./index.html');
-    }
+    var apiURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=e54e81ac9ec17907a9fb6e5fa99ae12e"
 
     fetch(apiURL)
-    .then(function(response) {
-        if (response.ok) {
-            console.log (response);
-            response.json().then(function (data) {
-                console.log(data);
-                displayWeather(data);
+        .then(function(response) {
+           // console.log(response);
+            return response.json();
+        })
+        .then(function(data) {
+            console.log(data);
 
-            });
-        } else {
-         alert("error:" + response.statusText)
-        }
-    })
-    .catch(function(error) {
-        alert("Unable to retrieve data.");
-    });
+            // IF YOU NEED data to make a second API call 
+            var lon = data.coord.lon;
+            var lat = data.coord.lat;
+            var coordURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=hourly,minutely&units=imperial&appid=e54e81ac9ec17907a9fb6e5fa99ae12e"
+           console.log(coordURL)
+            fetch(coordURL)
+            .then(function(bResponse) {
+                // console.log(response);
+                 return bResponse.json();
+             })
+             .then(function(bData) {
+                 console.log(bData);})
+            
+            displayWeather(data);
+      
+        })
+        .catch(function(error) {
+            console.log(error);
+            // alert("Unable to retrieve data.");
+        }); 
+  };
+
+  
  
+ 
+  /*
+  WHEN I view current weather conditions for that city
+  THEN I am presented with the city name, the date, an icon representation of weather conditions, the temperature, the humidity, the wind speed, and the UV index
+  */
+var displayWeather = function(data, bData) {
 
+    //how can I display this data on screen
+    var cName = data.name;
+    var weatherIcon = data.weather[0].icon;
+    var temperature = data.main.temp;
+    var humidity = data.main.humidity;
+    var uvIndex = bData.current.uvi;
+    var windSpeed = data.wind.speed;
+    var cWeather = data.weather[0];
+  
+
+      citySearchTerm.textContent = cName;
+console.log(uvIndex)
     
-};
+    // temperature,windSpeed, humidity);
 
-var displayWeather = function(data, searchTerm) {
-      var temperature = current.temp;
-      var humidity = current.humidity;
-      var uvIndex = current.uvi;
-      var windSpeed = current.wind_speed;
-      var weatherIcon = current.weather.icon;
-      var cWeather = current.weather;
-
-      citySearchTerm.textContent = searchTerm;
-
-      var weatherEl = document.createElement('li');
-     weatherEl.appendChild(data[0].temperature);
-     weatherList.appendChild(weatherE1);
+      for (var i = 0; i<5; i++) {
+        var weatherEl = document.createElement('li');
+        weatherEl.innerText = "Temp: " + temperature
+        // weatherEl.innerText = "Humidity:" + humidity;
+        weatherList.appendChild(weatherEl);}
 
   }
+
 
 /*
 GIVEN a weather dashboard with form inputs
@@ -80,11 +93,6 @@ WHEN I search for a city
 THEN I am presented with current and future conditions for that city and that city is added to the search history
 */
 
-/*
-WHEN I view current weather conditions for that city
-THEN I am presented with the city name, the date, an icon representation of weather conditions, the temperature, the humidity, the wind speed, and the UV index
- 
-*/
 
 /*
 WHEN I view the UV index
