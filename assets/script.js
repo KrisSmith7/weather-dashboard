@@ -31,38 +31,45 @@ var formSubmitHandler = function (event) {
     
     if (cityname) {
         getCityWeather(cityname);
-        
-        cityName.textContent = cityname;
-        currentName.textContent = cityname;
+    
+    //passes current searched city to the display card for current weather and forecast section
+    cityName.textContent = cityname;
+    currentName.textContent = cityname;
+    saveCitySearch(cityname);
 
         cityInputEl.value = '';
-        searchedCities.push(cityname);
-        saveCitySearch();
-        displaySearchHistory()
+        // searchedCities.push(cityname);
+        // displaySearchHistory()
     } else {
         alert('Please enter a city to search.');
     }
 };
 
-var saveCitySearch = function() {
+//city is added to the search history
+var saveCitySearch = function(cityname) {
+    searchedCities.push(cityname)
     localStorage.setItem("SearchedCities", JSON.stringify(searchedCities));
+    displaySearchHistory()
 };
 
 var displaySearchHistory = function() {
+    prevSearchContainer.innerHTML = ""
+
     let currentCities = JSON.parse(localStorage.getItem("SearchedCities"));
-    // console.log (currentCities);
+    console.log (currentCities);
       
 
     //create button for each city searched
     for (var i = 0; i < currentCities.length; i++) {
         var newButton = document.createElement("button");
-        newButton.textContent = currentCities[i];
-        newButton.classList = "btn btn-secondary btn-lg my-2 p-2 w-100";
+        newButton.innerText = currentCities[i];
+        newButton.classList = "text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-800 dark:border-gray-700";
         // cityEl.setAttribute("data-city", cities[i]);
         prevSearchContainer.appendChild(newButton);
     }
  };
 
+//fetch call to openweathermap API
 var getCityWeather = function (city) {
     var apiURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIkey
     fetch(apiURL)
@@ -86,13 +93,13 @@ var getCityWeather = function (city) {
   
  
  
-  /*
-  WHEN I view current weather conditions for that city
-  THEN I am presented with the city name, the date, an icon representation of weather conditions, the temperature, the humidity, the wind speed, and the UV index
-  */
+
+// presents the date, an icon representation of weather conditions, the temperature, the humidity, the wind speed, and the UV index
 var displayWeather = function(data) {
 
     //displays weather conditions on screen
+    var currCard = document.getElementById("current-card");
+    currCard.classList.remove("invisible");
     var currentIconNumber = data.current.weather[0].icon;
     currentIcon.setAttribute("src", "http://openweathermap.org/img/wn/" + currentIconNumber + "@2x.png");
    
@@ -120,14 +127,13 @@ var displayWeather = function(data) {
     fiveDayContainerEl.innerHTML = ""
 
     for (var i = 0; i < 5; i++){
-      
-          let day = weekday[d.getDay() + 1 + i];
+        let day = weekday[d.getDay() + 1 + i];
    
         
         var cardContainer = document.createElement("div");
-        cardContainer.setAttribute("class", "px-8")
+        cardContainer.setAttribute("class", "w-full lg:w-1/5 flex justify-center lg:px-8")
         var cardBody = document.createElement("div");
-        cardBody.setAttribute("class", "bg-gray-500 text-white border-2 rounded-md p-3");
+        cardBody.setAttribute("class", "w-full flex flex-col justify-center bg-blue-700 text-white border-2 shadow-lg rounded-md p-3");
         
         var cityDate = document.createElement("div");
         cityDate.textContent = day
@@ -156,21 +162,16 @@ var displayWeather = function(data) {
   }
 
 
+function deletePrevSearches() {
+    localStorage.clear("SearchedCities");
+    searchedCities = [];
+    console.log(searchedCities)
+    prevSearchContainer.innerHTML = ""
+}
 
 
-/*
-GIVEN a weather dashboard with form inputs
-WHEN I search for a city
-THEN I am presented with current and future conditions for that city and that city is added to the search history
-*/
 
 
-
-
-/*
-WHEN I view future weather conditions for that city
-THEN I am presented with a 5-day forecast that displays the date, an icon representation of weather conditions, the temperature, the wind speed, and the humidity
-*/
 
 /*
 WHEN I click on a city in the search history
