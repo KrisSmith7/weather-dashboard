@@ -15,7 +15,7 @@ var uvContainer = document.querySelector('#current-index');
 var currentIcon = document.querySelector('#current-wIcon');
 const APIkey = 'b95de3ec77908dd1b6d987025a729e40'
 
-const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 const d = new Date();
 let today = weekday[d.getDay()];
 
@@ -120,31 +120,18 @@ var displayWeather = function(data) {
     fiveDayContainerEl.innerHTML = ""
 
     for (var i = 0; i < 5; i++){
-        
-        let curr = new Date 
-    let week = []
-    
-    for (let i = 1; i <= 7; i++) {
-      let first = curr.getDate() - curr.getDay() + i 
-      let day = new Date(curr.setDate(first)).toISOString().slice(0, 10)
-      week.push(day)
-    }
-    console.log(week);
+      
+          let day = weekday[d.getDay() + 1 + i];
    
         
-    // let day = weekday[d.getDay()];
-    // console.log(d)
-
-      var cardContainer = document.createElement("div");
-      cardContainer.setAttribute("class", "px-8")
-      var cardBody = document.createElement("div");
-      cardBody.setAttribute("class", "bg-gray-500 text-white border-2 rounded-md p-3");
-  
-      var cityDate = document.createElement("div");
-      cityDate.textContent =  week[i]
-    //   const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-    //   const d = new Date();
-    
+        var cardContainer = document.createElement("div");
+        cardContainer.setAttribute("class", "px-8")
+        var cardBody = document.createElement("div");
+        cardBody.setAttribute("class", "bg-gray-500 text-white border-2 rounded-md p-3");
+        
+        var cityDate = document.createElement("div");
+        cityDate.textContent = day
+     
   
       var weatherImage = document.createElement("img");
       var iconNumber = data.daily[i].weather[0].icon;
