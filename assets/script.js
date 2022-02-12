@@ -38,8 +38,6 @@ var formSubmitHandler = function (event) {
     saveCitySearch(cityname);
 
         cityInputEl.value = '';
-        // searchedCities.push(cityname);
-        // displaySearchHistory()
     } else {
         alert('Please enter a city to search.');
     }
@@ -84,7 +82,7 @@ var getCityWeather = function (city) {
         .then(response => response.json())
         .then(data => {
 
-            // IF YOU NEED data to make a second API call 
+            //data to make a second API call 
             const lon = data.coord.lon;
             const lat = data.coord.lat;
             const coordURL = "http://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=hourly,minutely&units=imperial&appid=" + APIkey
@@ -98,9 +96,6 @@ var getCityWeather = function (city) {
   });
 }
 
-  
- 
- 
 
 // presents the date, an icon representation of weather conditions, the temperature, the humidity, the wind speed, and the UV index
 var displayWeather = function(data) {
