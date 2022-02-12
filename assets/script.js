@@ -77,7 +77,7 @@ var displaySearchHistory = function() {
 
 //fetch call to openweathermap API
 var getCityWeather = function (city) {
-    var apiURL = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIkey
+    var apiURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIkey
     fetch(apiURL)
         .then(response => response.json())
         .then(data => {
@@ -85,7 +85,7 @@ var getCityWeather = function (city) {
             //data to make a second API call 
             const lon = data.coord.lon;
             const lat = data.coord.lat;
-            const coordURL = "http://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=hourly,minutely&units=imperial&appid=" + APIkey
+            const coordURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=hourly,minutely&units=imperial&appid=" + APIkey
            
             fetch(coordURL)
             .then(response => {return response.json()})
@@ -104,7 +104,7 @@ var displayWeather = function(data) {
     var currCard = document.getElementById("current-card");
     currCard.classList.remove("invisible");
     var currentIconNumber = data.current.weather[0].icon;
-    currentIcon.setAttribute("src", "http://openweathermap.org/img/wn/" + currentIconNumber + "@2x.png");
+    currentIcon.setAttribute("src", "https://openweathermap.org/img/wn/" + currentIconNumber + "@2x.png");
    
     currentDate.textContent = today;
     currentTemp.textContent = "Temp: " + data.current.temp + " F";
@@ -145,7 +145,7 @@ var displayWeather = function(data) {
   
       var weatherImage = document.createElement("img");
       var iconNumber = data.daily[x].weather[0].icon;
-      weatherImage.setAttribute("src", "http://openweathermap.org/img/wn/" +iconNumber + "@2x.png");
+      weatherImage.setAttribute("src", "https://openweathermap.org/img/wn/" +iconNumber + "@2x.png");
    
      
       var tempElement = document.createElement("div");
