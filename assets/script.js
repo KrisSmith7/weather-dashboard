@@ -58,16 +58,24 @@ var displaySearchHistory = function() {
     let currentCities = JSON.parse(localStorage.getItem("SearchedCities"));
     console.log (currentCities);
       
-
     //create button for each city searched
     for (var i = 0; i < currentCities.length; i++) {
         var newButton = document.createElement("button");
         newButton.innerText = currentCities[i];
-        newButton.classList = "text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-800 dark:border-gray-700";
-        // cityEl.setAttribute("data-city", cities[i]);
+        newButton.classList = "searched text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-800 dark:border-gray-700";
+        newButton.setAttribute("onclick", "prevSearchWeather()");
         prevSearchContainer.appendChild(newButton);
     }
  };
+
+// WHEN I click on a city in the search history, THEN I am again presented with current and future conditions for that city
+ function prevSearchWeather() {
+    const prevCity = document.activeElement.innerText;
+    cityName.textContent = prevCity;
+    currentName.textContent = prevCity;
+    getCityWeather(prevCity);
+    displayWeather(prevCity)
+ }
 
 //fetch call to openweathermap API
 var getCityWeather = function (city) {
@@ -128,6 +136,7 @@ var displayWeather = function(data) {
 
     for (var i = 0; i < 5; i++){
         let day = weekday[d.getDay() + 1 + i];
+        let x = i+1
    
         
         var cardContainer = document.createElement("div");
@@ -140,20 +149,20 @@ var displayWeather = function(data) {
      
   
       var weatherImage = document.createElement("img");
-      var iconNumber = data.daily[i].weather[0].icon;
+      var iconNumber = data.daily[x].weather[0].icon;
       weatherImage.setAttribute("src", "http://openweathermap.org/img/wn/" +iconNumber + "@2x.png");
    
      
       var tempElement = document.createElement("div");
-      tempElement.textContent = "Temp: " + data.daily[i].temp.day + "°F"
+      tempElement.textContent = "Temp: " + data.daily[x].temp.day + "°F"
       
   
       var windSpeed = document.createElement("div");
-      windSpeed.textContent = "Wind Speed: " + data.daily[i].wind_speed + "MPH";
+      windSpeed.textContent = "Wind Speed: " + data.daily[x].wind_speed + "MPH";
   
   
       var humidityF = document.createElement("div");
-      humidityF.textContent = "Humidity: " + data.daily[i].humidity + "%";
+      humidityF.textContent = "Humidity: " + data.daily[x].humidity + "%";
     
       cardBody.append(cityDate, weatherImage, tempElement, windSpeed, humidityF);
       cardContainer.append(cardBody);
@@ -168,14 +177,5 @@ function deletePrevSearches() {
     console.log(searchedCities)
     prevSearchContainer.innerHTML = ""
 }
-
-
-
-
-
-/*
-WHEN I click on a city in the search history
-THEN I am again presented with current and future conditions for that city
-*/
 
 citySearchForm.addEventListener('submit', formSubmitHandler);
